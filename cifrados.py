@@ -4,38 +4,35 @@ archivo=""
 def main():
 	"""Menu de opciones de todo el programa"""
 	opc=0;
-	while opc!=10:
+	while opc!=9:
 		print("\nMenu\n")
-		print("1.- Ingresa un archivo .txt a descifrar o cifrar\n")
-		print("2.- Cifrado Morse 	6.- Descifrar Morse\n")
-		print("3.- Cifrado ASCII 	7.- Descifrar ASCII\n")
-		print("4.- Cifrado Cesar 	8.- Descifrar Cesar\n")
-		print("5.- Cifrado Escitala 	9.- Descifrar Escitala\n")
-		print("10.- Salir\n")
+		print("1.- Cifrado Morse 	2.- Descifrar Morse\n")
+		print("3.- Cifrado ASCII 	4.- Descifrar ASCII\n")
+		print("5.- Cifrado Cesar 	6.- Descifrar Cesar\n")
+		print("7.- Cifrado Escitala 	8.- Descifrar Escitala\n")
+		print("9.- Salir\n")
 		print("Opcion:")
 		opc=input()
 		if opc == 1:
-			abrirArchivo()
-		elif opc == 2:
 			cifrarMorse()
+		elif opc == 2:
+			descifrarMorse()
 		elif opc == 3:
 			cifrarASCII()
 		elif opc == 4:
-			cifrarCesar()
-		elif opc == 5:
-			cifrarEscitala()
-		elif opc == 6:
-			descifrarMorse()
-		elif opc == 7:
 			descifrarASCII()
-		elif opc == 8:
+		elif opc == 5:
+			cifrarCesar()
+		elif opc == 6:
 			descifrarCesar()
-		elif opc == 9:
+		elif opc == 7:
+			cifrarEscitala()
+		elif opc == 8:
 			descifrarEscitala()
-		elif opc == 10:
+		elif opc == 9:
 			print("\n 		Adios!!!")
 		else:
-			opc=10;
+			opc=9;
 			print("\n 		Adios!!!")
 
 def abrirArchivo():
@@ -99,26 +96,41 @@ def cifrarEscitala():
 	"""se muestra el mensaje a cifrar"""
 	print("\n	Mensaje a cifrar: "+text)	
 
+	m=[]
+	for i in range(row):
+		m.append([0]*col)
+
+	con=0
 	tam=len(text)
-	
-	"""hacemos el array que usaremos para guardar nuestro cifrado"""
+	for i in range(0,row):
+		for j in range(0,col):
+			if con<tam:
+				m[i][j]=text[con]			
+			else:
+				m[i][j]=" "
+			con=con+1
+
+	tam=row*col
 	cifrado=[]
 	for i in range(tam):
-		cifrado.append(0)
+		cifrado.append(" ")
 
-	"""hacemos el cifrado"""
-	cont=0
-	for i in range (tam):
-		x=(col*(i%row))+(i/row)		
-		"""metodo de ordenamiento para el cifrado"""
-		cifrado[cont]=text[x]
-		cont=cont+1
+	con=0
+	for i in range(0,col):
+		for j in range(0,row):
+			cifrado[con]=m[j][i]		
+			con=con+1
+	
 	"""cifrado es tipo list, lo pasamos a string para poder llenar el txt"""
-	cif=''.join(cifrado)
-	print("\nCifrado: "+cif)
 	archi=open('cifradoEscitala.txt','w')
-	archi.write(cif)
+	msg=''.join(cifrado)
+	print(msg)
+	for i in range(tam):
+		#print(cifrado[i])
+		archi.write(cifrado[i])
+	
 	archi.close()
+	print("\n 	Se ha terminado de cifrar, revisa el arhivo cifradoEscitala.txt");
 
 def descifrarEscitala():
 	global archivo
@@ -133,22 +145,30 @@ def descifrarEscitala():
 	row=input()
 	tam=col*row
 
-	"""se crea el arreglo donde se escribira el mensaje"""
-	desCifrado=[]
+	m=[]
+	for i in range(row):
+		m.append([0]*col)
+
+	con=0
+	tam=len(text)
+	for i in range(0,col):
+		for j in range(0,row):
+			m[j][i]=text[con]			
+			con=con+1
+
+	msgOr=[]
 	for i in range(tam):
-		desCifrado.append(0)
-	
-	cont=0
-	for i in range (tam):
-		x=(row*(i%col))+(i/col)		
-		"""metodo de ordenamiento para el descifrado"""
-		desCifrado[cont]=texto[x]
-		cont=cont+1
-	mensaje=''.join(desCifrado)
-	print("\n	Mensaje: "+mensaje)
+		msgOr.append(" ")
+
+	con=0
+	for i in range(0,row):
+		for j in range(0,col):
+			msgOr[con]=m[i][j]		
+			con=con+1
 
 	archi=open('mensajeEscitala.txt','w')
-	archi.write(mensaje)
+	for i in range(tam):
+		archi.write(msgOr[i])
 	archi.close()
 
 def cifrarMorse():
@@ -261,4 +281,5 @@ def descifrarCesar():
 	arch.close()
 	print("\n 	Se ha terminado de descifrar, revisa el arhivo mensajeCesar.txt");
 
+abrirArchivo()
 main()
